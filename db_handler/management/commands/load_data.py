@@ -1,8 +1,9 @@
-import os
 import csv
+import os
+
+from django.core.management.base import BaseCommand, CommandError
 
 from db_handler.models import ShopsDB
-from django.core.management.base import BaseCommand, CommandError
 
 
 class Command(BaseCommand):

@@ -1,6 +1,8 @@
-from .fiedshandler import RequestFieldsMixin
 from rest_framework import serializers
+
 from db_handler.models import ShopsDB, User
+
+from .fiedshandler import RequestFieldsMixin
 
 
 class UserSerializer(serializers.ModelSerializer):

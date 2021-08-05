@@ -23,6 +23,22 @@ class RequestFieldsMixin(object):
 
         exclude = query_params.getlist(self.exclude_arg_name)
         exclude_field = {name for name in exclude if name}
+
+        if (
+            query_params.getlist('group')
+           and len(query_params.getlist('group')) == 1):
+
+            exclude_field.add('date')
+            exclude_field.add('visitors')
+            exclude_field.add('shop')
+
+        if (
+            query_params.getlist('group')
+           and len(query_params.getlist('group')) == 2):
+
+            exclude_field.add('date')
+            exclude_field.add('earnings')
+
         if not include_field and not exclude_field:
             return
         serializer_fields = set(self.fields)
