@@ -41,4 +41,4 @@ class ShopsDB(models.Model):
     earnings = models.IntegerField()
 
     def __str__(self):
-        return f"{self.Shop} based {self.Country}"
+        return f"{self.shop} based {self.country}"
