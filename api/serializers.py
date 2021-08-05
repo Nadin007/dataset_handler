@@ -16,7 +16,6 @@ class ShopsDBSerializer(RequestFieldsMixin, serializers.ModelSerializer):
     controls which fields should be displayed, contains function sorts
     API response data by group
     """
-
     class Meta:
         model = ShopsDB
         fields = ('date', 'shop', 'country', 'visitors', 'earnings')

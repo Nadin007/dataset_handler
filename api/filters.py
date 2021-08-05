@@ -21,3 +21,24 @@ class DateFilter(filters.SearchFilter):
            and search_terms.get('from_date') is None):
             queryset = queryset.filter(date__lte=search_terms['date_to'])
         return queryset
+
+
+'''class GroupFilterMixin(object):
+
+    def list(self, request, *args, **kwargs):
+        search_terms = self.request.GET
+        if (search_terms.get('group') is not None
+            and search_terms.get('group') == 'shop'):
+            return Response(OrderedDict(self._build_shop_list()))
+        return super().list(request, *args, **kwargs)
+
+    def _build_shop_list(self):
+        shops = ShopsDB.objects.all()
+        result = {}
+        for shop in shops:
+            key = shop.shop
+            if key not in result:
+                result[key] = []
+            result[key].append(serializers.serialize('json', [shop]))
+        return result
+'''

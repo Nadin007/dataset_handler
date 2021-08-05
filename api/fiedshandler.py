@@ -7,16 +7,16 @@ class RequestFieldsMixin(object):
         try:
             request = self.context['request']
             method = request.method
-        except Exception as s:
-            return f'Error: {s}'
+        except Exception:
+            return
 
         if method != 'GET':
             return
 
         try:
             query_params = request.query_params
-        except Exception as s:
-            return f'Error: {s}'
+        except Exception:
+            return
 
         include = query_params.getlist(self.include_arg_name)
         include_field = {name for name in include if name}
