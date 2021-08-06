@@ -31,69 +31,66 @@ class DateFilter(filters.SearchFilter):
         return queryset
 
 
+GROUP_ARG_NAME = {'shop', 'country'}
+ORD_ARG_POS = {'visitors', 'earnings', 'shop', 'country'}
+ORD_ARG_NEG = {f'-{name}' for name in ORD_ARG_POS}
+ORD_ARG_NAME = ORD_ARG_POS | ORD_ARG_NEG
+
+
 class GroupFilterMixin(object):
 
     group_arg_name = 'group'
     ordering_arg_name = 'o'
 
     def ordering__queryset(
-       self, queryset, ordering_include, group_include_field):
+       self, ordering_include, group_include_field):
+        order_name = 'earnings'
+        ordering_include_field = {
+            name for name in ordering_include if name} & ORD_ARG_NAME
 
-        ordering_include_field = {name for name in ordering_include if name}
-
-        order_name = (
-                '-earnings' if '-earnings' in ordering_include_field
-                else 'earnings')
-        try:
-            if group_include_field == 2:
-                order_name = (
-                    '-visitors' if '-visitors' in ordering_include_field
-                    else 'visitors')
-
-                return ShopsDB.objects.values('country', 'shop').annotate(
-                    visitors=Sum('visitors')).order_by(order_name)
-
-            return ShopsDB.objects.values('country').annotate(
-                earnings=Sum('earnings')).order_by(order_name)
-
-        except Exception as s:
-            raise Exception('Something wrong happened') from s
+        if ordering_include_field:
+            order_name = ordering_include_field.pop()
+        return ShopsDB.objects.values(
+            *list(group_include_field)).annotate(earnings=Sum(
+                'earnings'), visitors=Sum('visitors')).order_by(
+                order_name)
 
     def filter_queryset(self, request, queryset, view):
         try:
             method = request.method
         except Exception:
-            return Exception('Something wrong happened')
+            raise Exception('Something wrong happened')
 
         if method != 'GET':
-            return Exception('Method isn alloved!')
+            raise Exception('Method is not allowed!')
 
         try:
             search_terms = request.query_params
         except Exception:
-            return Exception(
+            raise Exception(
                 'Something wrong happened. Can not get a request.query_params')
 
         group_include = search_terms.getlist(self.group_arg_name)
-        group_include_field = {name for name in group_include if name}
+        group_include_field = {
+            name for name in group_include if name} & GROUP_ARG_NAME
         ordering_include = search_terms.getlist(self.ordering_arg_name)
 
         if not group_include_field:
             return queryset
 
         if len(group_include_field) == 1:
-            if 'country' not in group_include_field:
-                return queryset
 
-            self.ordering__queryset(
-                queryset, ordering_include, group_include_field)
+            return self.ordering__queryset(
+                ordering_include, group_include_field)
 
         if len(group_include_field) == 2:
-            if ('country' and 'shop') not in group_include_field:
-                raise Exception(
-                    'GROUP_BY is only available for country and shop fields!')
+            for field in group_include_field:
+                if field not in GROUP_ARG_NAME:
+                    raise Exception(
+                        'GROUP_BY is only available for GROUP_ARG_NAME'
+                        'and shop fields!')
 
-            self.ordering__queryset(
-                queryset, ordering_include, group_include_field)
+            return self.ordering__queryset(
+                ordering_include, group_include_field)
 
         return queryset
