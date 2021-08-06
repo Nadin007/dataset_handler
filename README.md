@@ -59,6 +59,15 @@ cd dataset_handler
 python3 manage.py runserver
 ````
 
+## Import CSV files into database
+
+Use load_data applications to import data from a CSV file into a database.
+When you invoke func. you should pass the path to the csv file:
+
+```sh
+python3 manage.py load_data './data/dataset.csv'
+````
+
 ## License
 
 MIT
