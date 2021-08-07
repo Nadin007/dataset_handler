@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 
 class ShopsDB(models.Model):
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateTimeField(auto_now=False)
     shop = models.TextField(max_length=100)
     country = models.TextField(max_length=10)
     visitors = models.IntegerField()

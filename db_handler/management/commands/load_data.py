@@ -39,8 +39,9 @@ class Command(BaseCommand):
                     dict_data = {}
                     for i, field in enumerate(row):
                         dict_data[fields_name[i]] = field
-
-                    _, created = ShopsDB.objects.get_or_create(**dict_data)
-                    print(created)
+                    try:
+                        ShopsDB.objects.get(**dict_data)
+                    except ShopsDB.DoesNotExist:
+                        ShopsDB.objects.create(**dict_data)
                 except Exception as e:
                     raise CommandError(e)
