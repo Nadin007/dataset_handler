@@ -1,20 +1,21 @@
 import os
 from datetime import timedelta
+from distutils.util import strtobool
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+dotenv_file = os.path.join(os.path.dirname(BASE_DIR), ".env")
+if os.path.isfile(dotenv_file):
+    load_dotenv(dotenv_file)
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY', default='#apt_6!t+uuc5xq_a_dennplcfl=+(!#ff4n%t%u43p703h#_+')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
+DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#apt_6!t+uuc5xq_a_dennplcfl=+(!#ff4n%t%u43p703h#_+'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
