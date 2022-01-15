@@ -24,8 +24,8 @@ class Command(BaseCommand):
         model_fields = [f.name for f in ShopsDB._meta.fields]
         fields_name = []
 
-        with open(csvpath, 'r') as csvFile:
-            reader = csv.reader(csvFile, delimiter=',', quotechar="\"")
+        with open(csvpath, 'r') as csvfile:
+            reader = csv.reader(csvfile, delimiter=',', quotechar="\"")
             fields_name = next(reader)
             for i, _ in enumerate(fields_name):
                 fields_name[i] = fields_name[i].lower().replace(' ', '_')
