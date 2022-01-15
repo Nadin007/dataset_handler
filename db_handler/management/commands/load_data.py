@@ -17,14 +17,14 @@ class Command(BaseCommand):
         if options.get('csv_path') is None:
             raise CommandError("Invalid Invocation. See help.")
 
-        csvPath = options.get('csv_path')
-        if not os.path.exists(csvPath):
-            raise CommandError(f"{csvPath} doesnt exist.")
+        csvpath = options.get('csv_path')
+        if not os.path.exists(csvpath):
+            raise CommandError(f"{csvpath} doesnt exist.")
 
         model_fields = [f.name for f in ShopsDB._meta.fields]
         fields_name = []
 
-        with open(csvPath, 'r') as csvFile:
+        with open(csvpath, 'r') as csvFile:
             reader = csv.reader(csvFile, delimiter=',', quotechar="\"")
             fields_name = next(reader)
             for i, _ in enumerate(fields_name):
@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 if not fields_name[i] in model_fields:
                     raise CommandError(
                         f'{fields_name[i]} field does not exists in {ShopsDB}.'
-                        )
+                    )
 
             for row in reader:
                 try:

@@ -28,6 +28,7 @@ class DateFilter(filters.SearchFilter):
         if (search_terms.get('date_to') is not None
            and search_terms.get('from_date') is None):
             return queryset.filter(date__lte=search_terms['date_to'])
+        return queryset
 
 
 GROUP_ARG_NAME = {'shop', 'country'}
