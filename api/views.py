@@ -4,7 +4,6 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 
 from db_handler.models import ShopsDB, User
-
 from .filters import DateFilter, GroupFilterMixin
 from .serializers import ShopsDBSerializer, UserSerializer
 

@@ -10,10 +10,10 @@ class DateFilter(filters.SearchFilter):
         try:
             method = request.method
             search_terms = request.GET
-        except Exception:
-            return
+        except Exception as s:
+            raise Exception(f'Exception: {s}')
         if method != 'GET':
-            return
+            raise Exception('Must be GET method')
 
         if (search_terms.get('from_date') is not None
            and search_terms.get('date_to') is not None):
@@ -27,8 +27,7 @@ class DateFilter(filters.SearchFilter):
 
         if (search_terms.get('date_to') is not None
            and search_terms.get('from_date') is None):
-            queryset = queryset.filter(date__lte=search_terms['date_to'])
-        return queryset
+            return queryset.filter(date__lte=search_terms['date_to'])
 
 
 GROUP_ARG_NAME = {'shop', 'country'}
@@ -42,8 +41,7 @@ class GroupFilterMixin(object):
     group_arg_name = 'group'
     ordering_arg_name = 'o'
 
-    def ordering__queryset(
-       self, ordering_include, group_include_field):
+    def ordering__queryset(self, ordering_include, group_include_field):
         order_name = 'earnings'
         ordering_include_field = {
             name for name in ordering_include if name} & ORD_ARG_NAME
