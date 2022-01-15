@@ -1,3 +1,5 @@
+![db_handler_workflow](https://github.com/Nadin007/dataset_handler/actions/workflows/db_handler.yml/badge.svg)
+
 # dataset_handler
 
 dataset_handler is an API service for getting information from a dataset.
